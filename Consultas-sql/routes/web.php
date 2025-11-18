@@ -6,6 +6,7 @@ use App\Http\Controllers\ConsultaController;
 Route::get('/', function () {
     return view('welcome');
 });
+//Rutas para los ejercicios
 Route::get('/Ejercicio1', [ConsultaController::class, 'insertar']);
 Route::get('/Ejercicio2', [ConsultaController::class, 'pedidosUsuarioId2']);
 Route::get('/Ejercicio3', [ConsultaController::class, 'informacionDetalladaPedidoYUsuario']);
