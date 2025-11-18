@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class ConsultaController
 {
-    //
-        public function insertar()
+    //1
+    //Insertar datos de prueba en las tablas usuarios y pedidos
+    //utilizando el método insert de Eloquent, de especifica el nombre de la columna y el valor a insertar
+    public function insertar()
     {
         Usuario::insert([
             ['nombre'=>'Ronaldo','correo'=>'ronaldo@mail.com','telefono'=>'7777-0001'],
@@ -30,33 +32,52 @@ class ConsultaController
 
         return "Datos insertados correctamente";
     }
-
+    //2
+    //Obtener todos los pedidos del usuario con id 2
+    //realizando una consulta con Eloquent utilizando el método where
+    //se especifica la columna, el operador y el valor a comparar
     public function pedidosUsuarioId2(){
         $pedidos=Pedido::where('id_usuario',2)->get();
         return $pedidos;
     }
 
+    //3
+    //Obtener información detallada de los pedidos junto con la información del usuario que realizó cada pedido
+    //utilizando la relación definida en el modelo Pedido con el método with
     public function informacionDetalladaPedidoYUsuario(){
         $detallePedido=Pedido::with('usuario')->get();
         return $detallePedido;
     }
 
+    //4
+    //Obtener pedidos con total entre 100 y 250
+    //utilizando el método whereBetween de Eloquent, que permite especificar un rango de valores para una columna en un rango [valor1, valor2]
     public function pedidos100a250(){
         $pedidos=Pedido::whereBetween('total',[100,250])->get();
         return $pedidos;
     }
 
+    //5
+    //Obtener usuarios cuyo nombre comienza con la letra 'R'
+    //utilizando el método where con el operador LIKE para realizar una búsqueda por patrón
     public function usuarioStartR(){
         $usuario=Usuario::where('nombre', 'LIKE', 'R%')->get();
         return $usuario;
     }
 
+    //6
+    //Obtener el total de pedidos realizados por el usuario con id 5
+    //utilizando el método count de Eloquent para contar el número de registros que cumplen con la condición
+    //count devuelve un valor entero con el número de registros
     public function totalPedidosUsuario5(){
         $totalPedidos= Pedido::where('id_usuario',5)->count();
         return $totalPedidos;
     }
 
     //7
+    //Obtener pedidos junto con la información del usuario que realizó cada pedido, ordenados por el total de forma descendente
+    //utilizando el query builder de Laravel con join para combinar las tablas pedidos y usuarios
+    //se seleccionan todas las columnas de ambas tablas y se ordena por la columna total en orden descendente
     public function PedidosyUsuariosOrdenadosPorTotal(){
         $detallesPedidos= DB::table('pedidos')
         ->join('usuarios','usuarios.id','=','pedidos.id_usuario')
@@ -67,12 +88,18 @@ class ConsultaController
     }
 
     //8
+    //Obtener la suma total de todos los pedidos
+    //utilizando el método sum de Eloquent para sumar los valores de una columna específica
     public function sumaTotal(){
         $totalsum=DB::table('pedidos')->sum('total');
         return $totalsum;
     }
 
     //9
+    //Obtener el pedido con el total menor junto con el nombre del usuario que realizó ese pedido
+    //utilizando el query builder de Laravel con join para combinar las tablas pedidos y usuarios
+    //se seleccionan todas las columnas de pedidos y la columna nombre de usuarios
+    //se ordena por la columna total en orden ascendente y se obtiene el primer resultado
     public function pedidoMenorYNombreUsuario(){
         $detallePedido=DB::table('pedidos')
         ->join('usuarios','usuarios.id','=','pedidos.id_usuario')
@@ -83,6 +110,9 @@ class ConsultaController
     }
 
     //10
+    //Obtener los pedidos agrupados por usuario
+    //utilizando el método groupBy de Eloquent para agrupar los resultados por una columna
+    //se obtiene la informacion de las columnas id_usuario, producto, cantidad y total
     public function pedidosAgrupadoPorUsuario(){
         $pedidos=Pedido::with('usuario')
         ->select('id_usuario','producto','cantidad','total')
